@@ -142,13 +142,13 @@ module.exports.adminSaveEditList = async (req, res) => {
       const updatedLocation = location;
 
       // Forward geocoding using Mapbox SDK
-      const geoData = await geocodingClient.forwardGeocode({
-          query: updatedLocation,
-          limit: 1
-      }).send();
+      // const geoData = await geocodingClient.forwardGeocode({
+      //     query: updatedLocation,
+      //     limit: 1
+      // }).send();
 
-      // Extract updated geometry
-      const updatedGeometry = geoData.body.features[0].geometry;
+      // // Extract updated geometry
+       const updatedGeometry = null
 
       // Update the fields
       up_listing.title = title;
