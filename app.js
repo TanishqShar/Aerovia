@@ -40,7 +40,7 @@ const cors = require('cors');
 const { contactUsController } = require("./controllers/contactUs.js");
 
 app.use(cors({
-  origin: 'http://your-frontend-domain.com',
+  origin: 'http://localhost:8080',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
@@ -99,25 +99,30 @@ passport.use(new localStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// Make user and flash available in all views
 app.use((req, res, next) => {
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
-  res.locals.currUser = req.user || null;
+  res.locals.currUser = req.user || null; // Ensures it's always defined
 
-  res.locals.isLoggedIn = req.isAuthenticated() || false;
-  // console.log("Is Logged In:", res.locals.isLoggedIn); 
+  res.locals.isLoggedIn = req.isAuthenticated();
   
-  // Check if profile picture exists; if not, use a default URL
-  if (req.user && req.user.profilePicture && req.user.profilePicture.purl) {
-    let originalUrl = req.user.profilePicture.purl;
-    let modifiedProfilePic = originalUrl.replace("/upload", "/upload/q_auto,e_blur:50,w_250,h_250");
-    res.locals.profilePic = modifiedProfilePic;
+  // Optional: profile pic logic
+  if (req.user && req.user.profilePicture?.purl) {
+    const originalUrl = req.user.profilePicture.purl;
+    res.locals.profilePic = originalUrl.replace("/upload", "/upload/q_auto,e_blur:50,w_250,h_250");
   }
 
-  // List of routes that are publicly accessible
-  const publicRoutes = ["/login", "/signup", "/forgot-password", "/", "/about", "/contact", "/terms", "/privacy", "/listing", "/feedback", "/admin" ,"/admin/dashboard"];
+  next();
+});
+// Restrict private route access here, separately
+app.use((req, res, next) => {
+  const publicRoutes = [
+    "/login", "/signup", "/forgot-password", "/", "/about",
+    "/contact", "/terms", "/privacy", "/listing", "/feedback",
+    "/admin", "/admin/dashboard"
+  ];
 
-  // Redirect non-logged-in users trying to access private routes
   if (!req.isAuthenticated() && !publicRoutes.includes(req.path)) {
     req.flash("error", "Please sign in to continue.");
     return res.redirect("/listing");
@@ -125,6 +130,33 @@ app.use((req, res, next) => {
 
   next();
 });
+
+// app.use((req, res, next) => {
+//   res.locals.success = req.flash('success');
+//   res.locals.error = req.flash('error');
+//   res.locals.currUser = req.user || null;
+
+//   res.locals.isLoggedIn = req.isAuthenticated() || false;
+//   // console.log("Is Logged In:", res.locals.isLoggedIn); 
+  
+//   // Check if profile picture exists; if not, use a default URL
+//   if (req.user && req.user.profilePicture && req.user.profilePicture.purl) {
+//     let originalUrl = req.user.profilePicture.purl;
+//     let modifiedProfilePic = originalUrl.replace("/upload", "/upload/q_auto,e_blur:50,w_250,h_250");
+//     res.locals.profilePic = modifiedProfilePic;
+//   }
+
+//   // List of routes that are publicly accessible
+//   const publicRoutes = ["/login", "/signup", "/forgot-password", "/", "/about", "/contact", "/terms", "/privacy", "/listing", "/feedback", "/admin" ,"/admin/dashboard"];
+
+//   // Redirect non-logged-in users trying to access private routes
+//   if (!req.isAuthenticated() && !publicRoutes.includes(req.path)) {
+//     req.flash("error", "Please sign in to continue.");
+//     return res.redirect("/listing");
+//   }
+
+//   next();
+// });
 
   
 // BOLOGS

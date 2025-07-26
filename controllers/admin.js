@@ -2,9 +2,9 @@ const listing = require("../models/listing.js");
 const review = require("../models/reviews.js");
 const User=require("../models/user.js");
 const Feedback=require("../models/feedback.js");
-const mbxgeocoding = require('@mapbox/mapbox-sdk/services/geocoding'); 
-const maptoken = process.env.MAP_TOKEN;
-const geocodingClient = mbxgeocoding({ accessToken: maptoken });
+// const mbxgeocoding = require('@mapbox/mapbox-sdk/services/geocoding'); 
+// const maptoken = process.env.MAP_TOKEN;
+// const geocodingClient = mbxgeocoding({ accessToken: maptoken });
 
 
 

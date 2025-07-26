@@ -1,62 +1,75 @@
 <style>
-    .dark-mode{
+    .dark-mode .feedback-container {
+        background-color: #2e2e2e;
+        box-shadow: 5px 10px 15px rgba(0, 0, 0, 0.712);
+    }
 
-        .feedback-container{
-            background-color: #2e2e2e;
-            box-shadow: 5px 10px 15px rgba(0, 0, 0, 0.712);
-        } 
-        #review-form input, 
-        #review-form textarea{
-            background-color: #787878 !important;
-            border: 2px solid #c1bfbf !important;
-            color: white !important;
-        }
-        #review-form input:focus{
-            background-color: #787878 !important;
-            border: 2px solid #cdcdcd !important;
-        }
-        #review-form textarea:focus{
-            background-color: #787878 !important;
-            border: 2px solid #cdcdcd !important;
-        }
-        #review-form input::placeholder {
-            color: #dadada !important;
-        }
-        #review-form textarea::placeholder{
-            color: #dadada !important;
-        }
+    .dark-mode #review-form input,
+    .dark-mode #review-form textarea {
+        background-color: #787878 !important;
+        border: 2px solid #c1bfbf !important;
+        color: white !important;
+    }
+
+    .dark-mode #review-form input:focus,
+    .dark-mode #review-form textarea:focus {
+        background-color: #787878 !important;
+        border: 2px solid #cdcdcd !important;
+    }
+
+    .dark-mode #review-form input::placeholder,
+    .dark-mode #review-form textarea::placeholder {
+        color: #dadada !important;
     }
 
     #footer {
-        background-image:url('footer_bg3.png');
+        background-image: url('footer_bg3.png');
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
-        padding:0 0;
-        /* Backdrop Filter for Blur Effect */
+        padding: 0 0;
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(8px);
-    }   
+    }
+
     #contact-us {
         padding: 15px;
         border-radius: 10px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         margin: 20px 0;
-        color: #030303 !important; /* Dark color for text */
+        color: #030303 !important;
     }
 
-.contact-icon {
-    color: #000000 !important; /* Warm coral color for icons */
-    font-size: 2rem;
-    margin-right: 10px;
-    transition: color 0.3s ease;
-}
+    .contact-icon {
+        color: #000000 !important;
+        font-size: 2rem;
+        margin-right: 10px;
+        transition: color 0.3s ease;
+    }
+
+    .feedback-popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 9999;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        width: 90%;
+        max-width: 600px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+
+    .feedback-popup .feedback-container {
+        width: 100%;
+    }
 </style>
 
 <footer class="container" id="footer">
     <div class="footer-left">
         <div class="brand">
-            <!-- <h2>Wanderlust</h2> -->
             <div class="wrapper six">
                 <div>
                     <h3 class="flicker">Aerovia</h3>
@@ -64,7 +77,7 @@
             </div>
             <p>Where adventure meets comfort.</p>
         </div>
-        <div class="contact-info" id="cantact-us">
+        <div class="contact-info" id="contact-us">
             <div class="email" style="display: flex; align-items: center;">
                 <i class="fas fa-envelope contact-icon" style="position: relative; bottom: 10px;"></i>
                 <p>Need assistance with your booking or any inquiries?<br>
@@ -77,6 +90,7 @@
             </div>
         </div>
     </div>
+
     <div class="footer-middle">
         <div class="company-links">
             <h3>Company</h3>
@@ -84,10 +98,11 @@
                 <li><a href="/about">About Us</a></li>
                 <li><a href="/privacy">Privacy Policy</a></li>
                 <li><a href="/terms">Terms & Conditions</a></li>
-                <li><a href="/contributors">Our Contributors</a></li>
+                
             </ul>
         </div>
     </div>
+
     <div class="footer-right">
         <h3>Connect with us</h3>
         <div class="social-media">
@@ -96,25 +111,26 @@
             <a href="#"><i class="fab fa-twitter"></i></a>
         </div>
         <div class="feedback">
-            <button id="feedback">Give your Feedback</button>
-            <!-- <a href="<%= currUser ? '/listing/feedback' : '/login' %>">
+            <% if (typeof currUser !== 'undefined' && currUser) { %>
                 <button id="feedback">Give your Feedback</button>
-            </a> -->
+            <% } else { %>
+                <a href="/login">
+                    <button id="feedback">Give your Feedback</button>
+                </a>
+            <% } %>
         </div>
     </div>
+
     <div class="copyright">
-        <p>© 2024 AEROVIA Private Limited. All rights reserved.</p>
-    </div>  
+        <p>© <span id="year"></span> AEROVIA Private Limited. All rights reserved.</p>
+    </div>
 
-
+    <% if (typeof currUser !== 'undefined' && currUser) { %>
     <div class="feedback-popup">
         <div class="feedback-container">
             <h2 data-aos="zoom-out-down" data-aos-duration="1200" data-aos-delay="200">Share Your Aerovia Experience!</h2>
             <form method="POST" action="/feedback" id="review-form" novalidate class="needs-validation">
-                <!-- <label for="rating" data-aos="zoom-out-down" data-aos-duration="1200" data-aos-delay="200">Your Rating:
-                </label> -->
                 <div class="star-rating" id="rating" aria-label="Rating" role="radiogroup" data-aos="zoom-out-down">
-                    <!-- <input type="radio" id="no-rate" class="input-no-rate" name="feedback[rating]" value="3" checked aria-label="No rating." /> -->
                     <input type="radio" id="star5" name="feedback[rating]" value="5" />
                     <label for="star5" title="5 stars">★</label>
                     <input type="radio" id="star4" name="feedback[rating]" value="4" />
@@ -127,23 +143,36 @@
                     <label for="star1" title="1 star">★</label>
                     <div class="invalid-feedback">Please add a title!</div>
                 </div>
-                    
-                <!-- <label for="user-name" data-aos="zoom-out-down" data-aos-duration="1200" data-aos-delay="200">Your Name:</label> -->
-                <input type="text" id="name" name="feedback[name]" class="feedback-name form-control" placeholder="Enter your name here.">
 
-                <!-- <label for="comment">Leave your comment: </label> -->
+                <input type="text" id="name" name="feedback[name]" class="feedback-name form-control" placeholder="Enter your name here.">
                 <textarea id="comment" name="feedback[comment]" class="feedback-comment form-control" placeholder="Enter your comment here...." required></textarea>
 
                 <div class="feed-buttons">
                     <button id="close-button" class="close-button btn btn-secondary">Close</button>
                     <button type="submit" class="submit-button btn btn-danger" data-aos="zoom-out-down">Submit</button>
                 </div>
-
             </form>
         </div>
     </div>
+    <% } %>
 </footer>
 
 <script>
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    const feedbackBtn = document.getElementById("feedback");
+    const popup = document.querySelector(".feedback-popup");
+    const closeBtn = document.getElementById("close-button");
+
+    if (feedbackBtn && popup && closeBtn) {
+        feedbackBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            popup.style.display = "block";
+        });
+
+        closeBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            popup.style.display = "none";
+        });
+    }
 </script>

@@ -76,7 +76,8 @@
             <a class="nav-link" href="/contributors">Our Contributors</a>
           </li>
 
-          <% if(!currUser) {%> <!--If inside currUser have not any user data then show this-->
+          <% if (typeof currUser === 'undefined' || !currUser) { %>
+ <!--If inside currUser have not any user data then show this-->
             <li class="nav-item">
               <a class="nav-link" href="/signup">Sign up</a>
             </li>
@@ -85,7 +86,8 @@
             </li>
             <% } %>
 
-              <% if(currUser) {%> <!--If inside currUser have any user data then show this-->
+              <% if (typeof currUser !== 'undefined' && currUser) { %>
+ <!--If inside currUser have any user data then show this-->
 
                 <li class="nav-item">
                   <a class="nav-link" href="/profile">Your profile</a>
@@ -113,11 +115,13 @@
         <a role="button" class="nav-link drop-button dropdown-toggle tg" data-bs-toggle="dropdown"
           aria-expanded="false">
           <i class="fa-solid fa-bars"></i>
-          <% if(!currUser) {%>
+         <% if (typeof currUser === 'undefined' || !currUser) { %>
+
             <img src="/noprofilenav.png" alt="" class="nav-profile">
             <% } %>
 
-              <% if(currUser) {%>
+              <% if (typeof currUser !== 'undefined' && currUser) { %>
+
                 <% if(currUser.profilePicture.purl) {%>
                   <img src="<%=profilePic%>" alt="Profile" class="nav-profile">
                 <% } else { %>
@@ -127,7 +131,8 @@
 
         </a>
         <ul class="dropdown-menu dropdown-menu-end desk-drop">
-          <% if(!currUser) {%>
+          <% if (typeof currUser !== 'undefined' && currUser) { %>
+
             <li class="nav-item drop auth">
               <a class="nav-link" href="/login">
               <i class="fa-solid fa-right-to-bracket" style="color: #fc3503;"></i>

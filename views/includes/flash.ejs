@@ -1,5 +1,6 @@
 <!-- For success message flashing -->
-<% if(success && success.length){ %>
+<% if(typeof success !== 'undefined' && success.length) { %>
+
 
     <button type="button" class="btn btn-primary" id="liveToastBtn" style="display:none;">Show live toast</button>
     <div class="toast-container position-fixed top-4 end-0 p-5">
@@ -19,7 +20,8 @@
 
 
 <!-- For error message flashing -->
-<% if(error && error.length){ %>
+<% if(typeof error !== 'undefined' && error.length) { %>
+
 
     <button type="button" class="btn btn-primary" id="liveToastBtn" style="display:none;">Show live toast</button>
     <div class="toast-container position-fixed top-4 end-0 p-5">
